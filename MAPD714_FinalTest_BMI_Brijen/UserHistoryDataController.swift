@@ -146,7 +146,7 @@ class UserHistoryDataController : UITableViewController {
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .normal,
                                         title: "Edit") { [weak self] (action, view, completionHandler) in
-                                            self?.historyEdit(index: indexPath.row)
+                                            self?.amendHistory(index: indexPath.row)
                                             completionHandler(true)
         }
         action.backgroundColor = .systemMint
@@ -156,51 +156,17 @@ class UserHistoryDataController : UITableViewController {
     /*
      Editing History Record
      */
-    func historyEdit(index: Int)
+    
+    func amendHistory(index: Int)
     {
         let alert = UIAlertController(title: "Update Weight", message: "", preferredStyle: .alert)
-        let currentMode = self.bmiCalcList[index].scaleMode as? String
-        alert.addTextField{field in
-            
-            if(currentMode == "Metric") {
-                field.placeholder = "Enter weight(in kg))"
-            } else {
-                field.placeholder = "Enter weight(in lbs)"
-            }
-        }
-        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: {[weak self](_) in
-            if let field = alert.textFields?.first {
-                if let weight = field.text, !weight.isEmpty {
-                    let reference = self!.ref.child(self!.bmiCalcList[index].date)
-                    let result = calculateBMI(weight: Double(weight)!,
-                                              height: Double(self!.heightInPrevious!)!,
-                                              scaleMode: currentMode!)
-                    let bmi = result.bmi
-                    let category = result.category
-                    reference.updateChildValues([
-                        "weight": weight,
-                        "bmi": bmi,
-                        "category": category
-                    ])
-
-                    DispatchQueue.main.async {
-                        self?.bmiCalcList[index].bmi = bmi
-                        self?.bmiCalcList[index].userWeight = Double(weight)!
-                        self?.bmiCalcList[index].selectedCategory = category
-                        self?.tableView.reloadData()
-                    }}}
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        }))
-       present(alert, animated: true)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true)
     }
     
-    func remove(child: String) {
-        let reference = self.ref.child(child)
-        reference.removeValue { error, _ in
-            print(error ?? "Error!!")
-        }
-    }
-    
+    /*
+     TableView Swipe Delete
+     */
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let deleteSwipeAction = UIContextualAction(style: .normal, title: "Delete") {
@@ -208,12 +174,20 @@ class UserHistoryDataController : UITableViewController {
             let Data = self.bmiCalcList[indexPath.row]
             self.bmiCalcList.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.remove(child: Data.date)
+            self.removeFromDB(child: Data.date)
         }
         deleteSwipeAction.backgroundColor = .red
         let configuration = UISwipeActionsConfiguration(actions: [deleteSwipeAction])
         return configuration
     }
+    
+    func removeFromDB(child: String) {
+        let reference = self.ref.child(child)
+        reference.removeValue { error, _ in
+            print(error ?? "Error!!")
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: (Any)?) {
         let history = segue.destination as! HistoryUpdateController
         let object = sender as! [String: Any?]
