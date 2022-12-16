@@ -26,8 +26,8 @@ func calculateBMI(weight: Double = 0, height: Double = 0, scaleMode: String = ""
         heightM = height * height
         bmi = (weight / heightM)  * 703
     }
-    var category = getCategory(bmi: bmi)
-    var color = getColor(bmiResultColor: bmi)
+    let category = getCategory(bmi: bmi)
+    let color = getColor(bmiResultColor: bmi)
     return (bmi, category, color)
 }
 
