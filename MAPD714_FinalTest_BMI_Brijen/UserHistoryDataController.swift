@@ -93,10 +93,8 @@ class UserHistoryDataController : UITableViewController {
     }
     
     /*
-     Fetching Last Record
+     Fetching Records
      */
-  
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if bmiCalcList.count < 1 {
             self.tableView.setEmptyMessage("Please enter your first record !!")
@@ -140,7 +138,9 @@ class UserHistoryDataController : UITableViewController {
         let senderData: [String: Any?] = ["name": self.nameInPrevious, "height": self.heightInPrevious , "scaleMode": self.modeInPrevious, "age": self.ageInPrevious]
         self.performSegue(withIdentifier: "showHistoryModifier", sender: senderData)
     }
-    
+    /*
+     TableView Swipe Edit
+     */
     
     override func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
