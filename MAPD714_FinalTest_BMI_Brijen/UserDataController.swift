@@ -39,7 +39,7 @@ class UserDatacontroller : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       // loadData()
+        loadData()
     }
 /*
  Selection of Scale Mode
@@ -111,7 +111,7 @@ class UserDatacontroller : UIViewController {
     }
     
   /*
-   Button "Done" On Click event Handler
+   Button "Done" navigates to TableView Screen
    */
 
     @IBAction func DoneButton(_ sender: Any) {
