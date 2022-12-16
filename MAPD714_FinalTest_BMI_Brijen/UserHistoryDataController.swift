@@ -116,7 +116,14 @@ class UserHistoryDataController : UITableViewController {
         tableCell.DateLabel.text = tableRow.date
         return tableCell
     }
+    /*
+     reloading TableView
+     */
     
+    @IBAction func refreshTableView(_ sender: Any) {
+        getLastEntry()
+        loadData()
+    }
     /*
      Adding New Record
      */
@@ -141,13 +148,14 @@ class UserHistoryDataController : UITableViewController {
     
     override func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal,
+        let updateAction = UIContextualAction(style: .normal,
                                         title: "Edit") { [weak self] (action, view, completionHandler) in
                                             self?.amendHistory(index: indexPath.row)
                                             completionHandler(true)
         }
-        action.backgroundColor = .systemMint
-        return UISwipeActionsConfiguration(actions: [action])
+        updateAction.backgroundColor = .systemMint
+        let configuration = UISwipeActionsConfiguration(actions: [updateAction])
+        return configuration
     }
     
     /*
@@ -156,7 +164,25 @@ class UserHistoryDataController : UITableViewController {
     
     func amendHistory(index: Int)
     {
-        let alert = UIAlertController(title: "Update Weight", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Confirmation !", message: "Do you want to update your data?", preferredStyle: .alert)
+        alert.addTextField
+        {
+            field in
+            field.placeholder = "Enter new weight : "
+        }
+        alert.addAction(UIAlertAction(title: "Update", style: .default, handler: { action in
+            let weight = alert.textFields?.first?.text
+            let reference = self.ref.child(self.bmiCalcList[index].date)
+            let scaleMode = self.bmiCalcList.last?.scaleMode
+            let result = calculateBMI(weight: Double(weight!)!,
+                                      height: Double(self.heightInPrevious!)!,
+                                      scaleMode: scaleMode!)
+            
+            reference.updateChildValues(["weight": weight!, "bmi": result.bmi, "category": result.category])
+            self.bmiCalcList.last?.bmi = result.bmi
+            self.bmiCalcList.last?.userWeight = Double(weight!)!
+            self.tableView.reloadData()
+        }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             present(alert, animated: true)
     }
@@ -171,18 +197,12 @@ class UserHistoryDataController : UITableViewController {
             let Data = self.bmiCalcList[indexPath.row]
             self.bmiCalcList.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.removeFromDB(child: Data.date)
+            let reference = self.ref.child(Data.date)
+            reference.removeValue { _,_ in}
         }
         deleteSwipeAction.backgroundColor = .red
         let configuration = UISwipeActionsConfiguration(actions: [deleteSwipeAction])
         return configuration
-    }
-    
-    func removeFromDB(child: String) {
-        let reference = self.ref.child(child)
-        reference.removeValue { error, _ in
-            print(error ?? "Error!!")
-        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: (Any)?) {
@@ -205,7 +225,6 @@ extension UITableView {
     }
 
     func restore() {
-
         self.separatorStyle = .singleLine
     }
 }

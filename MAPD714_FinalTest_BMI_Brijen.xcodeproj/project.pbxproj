@@ -95,11 +95,11 @@
 				814B7C7F2948CAC400112F51 /* UserHistoryDataController.swift */,
 				814B7C812948D0D400112F51 /* HistoryTableViewCell.swift */,
 				814B7C832948D3BC00112F51 /* HistoryUpdateController.swift */,
+				814B7C882948FBED00112F51 /* UtilityController.swift */,
 				814B7C762948409A00112F51 /* Info.plist */,
 				814B7C6E2948409700112F51 /* Main.storyboard */,
 				814B7C712948409A00112F51 /* Assets.xcassets */,
 				814B7C732948409A00112F51 /* LaunchScreen.storyboard */,
-				814B7C882948FBED00112F51 /* UtilityController.swift */,
 			);
 			path = MAPD714_FinalTest_BMI_Brijen;
 			sourceTree = "<group>";

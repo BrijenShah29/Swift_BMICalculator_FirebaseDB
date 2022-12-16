@@ -46,7 +46,7 @@ func getColor(bmiResultColor: Double) -> UIColor
     case 17...18.5:
         color = UIColor(red: 255/255, green: 221/255, blue: 122/255, alpha: 1.0)
     case 18.5...25:
-        color = UIColor(red: 148/255, green: 239/255, blue: 2/255, alpha: 1.0)
+        color = UIColor(red: 94/255, green: 229/255, blue: 57/255, alpha: 1.0)
     case 25...30:
         color = UIColor(red: 255/255, green: 168/255, blue: 56/255, alpha: 1.0)
     case 30...35:
