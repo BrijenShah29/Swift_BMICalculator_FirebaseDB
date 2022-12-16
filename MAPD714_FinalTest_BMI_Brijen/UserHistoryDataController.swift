@@ -12,17 +12,15 @@ import FirebaseDatabase
 
 class UserHistoryDataController : UITableViewController {
     
-    
-    var ref = Database.database().reference()
-    var refObservers: [DatabaseHandle] = []
     private var bmiCalcList: [BMIModel] = []
     var cellIdentifier = "historyDataCell"
-    
     var heightInPrevious: String?
     var modeInPrevious: String?
     var nameInPrevious: String?
     var ageInPrevious: String?
     
+    var ref = Database.database().reference()
+    var refObservers: [DatabaseHandle] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
