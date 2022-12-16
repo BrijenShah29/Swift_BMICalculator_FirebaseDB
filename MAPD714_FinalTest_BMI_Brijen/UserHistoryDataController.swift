@@ -66,9 +66,8 @@ class UserHistoryDataController : UITableViewController {
         ref.observeSingleEvent(of: .value) {
             snapshot  in
             var bmiArray: [BMIModel] = []
-            //
+        
             for child in snapshot.children {
-                    //
                     if
                         let dataSnapshot = child as? DataSnapshot,
                         let datachange = dataSnapshot.value as? [String:AnyObject],
@@ -87,9 +86,7 @@ class UserHistoryDataController : UITableViewController {
             self.bmiCalcList.append(contentsOf: bmiArray)
             self.tableView.reloadData()
             self.ref.removeAllObservers()
-            
         }
-        
     }
     
     /*
