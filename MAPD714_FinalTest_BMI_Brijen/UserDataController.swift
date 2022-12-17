@@ -117,6 +117,9 @@ class UserDatacontroller : UIViewController {
     @IBAction func DoneButton(_ sender: Any) {
         tabBarController?.selectedIndex = 1
     }
+    
+    
+    
     /*
      Function Load data to show last Calculation
      */
@@ -148,6 +151,8 @@ class UserDatacontroller : UIViewController {
             }
         });
     }
+    
+    
     /*
      Function to update scale Label
      */
